@@ -17,6 +17,8 @@ const mysqlDatabase = "pay";
 
 const app = express();
 
+var arr = [];
+
 app.get("/checkUserLogin", (req, res) => {
     const q = req.query;
     let uri = `${yijieLoginURL}?$sdk=${q.sdk}&app=${q.app}&uin=${q.uin}&sess=${q.sess}`;
@@ -40,7 +42,37 @@ app.get("/orderCallBack", (req, res) => {
     }*/
     console.log("req.query:" + req.query);
     console.log("res:" + res);
-    res.send("SUCCESS " + "req.query:" + req.query + " res:" + res);
+    res.send("SUCCESS " + "req.query:" + req.query + " res:" + res + "query.app:" + req.query.app);
+    arr.push("SUCCESS " + "req.query:" + req.query + " res:" + res + "query.app:" + req.query.app);
+
+    return;
+    //插入数据库
+    let order = convert2Order(req.query);
+    let query = connection.query("INSERT IGNORE INTO orders SET ?", order, function (error, results, fields) {
+        if (error) {
+            console.log(error);
+            return;
+        }
+    });
+    console.log("execute sql:", query.sql);
+
+    res.send("SUCCESS");
+});
+
+app.get("/checkOrder", (req, res) => {
+    //校验数据来自于支付服务器而不是恶意第三方
+    /*const serverSign = getServerSign(req.query);
+    if (serverSign !== req.query.sign) {
+        res.send("FAIL");
+        return 
+    }*/
+    var result;
+    for(var i =0; i < arr.length; i++)
+    {
+        result += arr[i];
+        result += "                       "
+    }
+    res.send(result);
 
     return;
     //插入数据库
