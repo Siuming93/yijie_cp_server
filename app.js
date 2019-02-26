@@ -66,7 +66,7 @@ app.get("/checkOrder", (req, res) => {
         res.send("FAIL");
         return 
     }*/
-    var result;
+    var result = "";
     for(var i =0; i < arr.length; i++)
     {
         result += arr[i];
