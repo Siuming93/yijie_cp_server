@@ -5,8 +5,8 @@ const request = require("request");
 const md5 = require("blueimp-md5");
 const mysql = require("mysql");
 
-const privateKey="2KFYOFV4QLWXWW7X7L09R99PPE13YCEV"; //App的同步密钥
-const port = 8000;  //端口
+const privateKey="CRE56MZWXGIBOP6XHQJB5N0CRHVLLCWS"; //App的同步密钥
+const port = 18000;  //端口
 const yijieLoginURL = "http://sync.1sdk.cn/login/check.html";
 const requestTimeout = 1500;    //请求超时。单位：毫秒。
 
@@ -33,12 +33,15 @@ app.get("/checkUserLogin", (req, res) => {
 
 app.get("/orderCallBack", (req, res) => {
     //校验数据来自于支付服务器而不是恶意第三方
-    const serverSign = getServerSign(req.query);
+    /*const serverSign = getServerSign(req.query);
     if (serverSign !== req.query.sign) {
         res.send("FAIL");
         return 
-    }
+    }*/
+    console.log("req.query:" + req.query);
+    console.log("res:" + res);
 
+    return;
     //插入数据库
     let order = convert2Order(req.query);
     let query = connection.query("INSERT IGNORE INTO orders SET ?", order, function (error, results, fields) {
@@ -84,7 +87,7 @@ app.get("/syncPayResult", (req, res) => {
 });
 
 app.listen(port, "0.0.0.0", () => console.log("listen on port", port));
-
+/*
 const connection = mysql.createConnection({
     host     : mysqlHost,
     user     : mysqlUser,
@@ -134,3 +137,4 @@ function convert2Order(query) {
 
     return order;
 }
+*/
