@@ -5,7 +5,7 @@ const request = require("request");
 const md5 = require("blueimp-md5");
 const mysql = require("mysql");
 
-const privateKey="CRE56MZWXGIBOP6XHQJB5N0CRHVLLCWS"; //App的同步密钥
+const privateKey = "CRE56MZWXGIBOP6XHQJB5N0CRHVLLCWS"; //App的同步密钥
 const port = 18000;  //端口
 const yijieLoginURL = "http://sync.1sdk.cn/login/check.html";
 const requestTimeout = 1500;    //请求超时。单位：毫秒。
@@ -22,7 +22,7 @@ var arr = [];
 app.get("/checkUserLogin", (req, res) => {
     const q = req.query;
     let uri = `${yijieLoginURL}?$sdk=${q.sdk}&app=${q.app}&uin=${q.uin}&sess=${q.sess}`;
-    request.get(uri, {timeout: requestTimeout}, (err, _, body) => {
+    request.get(uri, { timeout: requestTimeout }, (err, _, body) => {
         if (err) {
             res.send(1);
             console.log("http get fail, err_code:", err.code);
@@ -42,8 +42,8 @@ app.get("/orderCallBack", (req, res) => {
     }*/
     console.log("req.query:" + req.query);
     console.log("res:" + res);
-    res.send("SUCCESS " + "req.query:" + req.query + " res:" + res + "query.app:" + req.query.app);
-    arr.push("SUCCESS " + "req.query:" + req.query + " res:" + res + "query.app:" + req.query.app);
+    arr.push("query.app:" + req.query.app + "SUCCESS " + "req.query:" + req.query + " res:" + res);
+    res.send("SUCCESS " + arr.length);
 
     return;
     //插入数据库
@@ -67,9 +67,8 @@ app.get("/checkOrder", (req, res) => {
         return 
     }*/
     var result = "";
-    for(var i =0; i < arr.length; i++)
-    {
-        result += arr[i];
+    for (var i = 0; i < arr.length; i++) {
+        result += i + ":" + arr[i];
         result += "                       "
     }
     res.send(result);
@@ -91,7 +90,7 @@ app.get("/checkOrder", (req, res) => {
 app.get("/syncPayResult", (req, res) => {
     const q = req.query;
     let uri = `${yijieLoginURL}?$sdk=${q.sdk}&app=${q.app}&uin=${q.uin}&sess=${q.sess}`;
-    request.get(uri, {timeout: requestTimeout}, (err, _, body) => {
+    request.get(uri, { timeout: requestTimeout }, (err, _, body) => {
         if (err) {
             res.send([]);
             console.log("http get fail, err_code:", err.code, " q:", q);
@@ -101,12 +100,12 @@ app.get("/syncPayResult", (req, res) => {
         if (body != 0) {
             res.send([]);
             console.log("checkUserLogin fail", q);
-            return; 
+            return;
         }
 
         //TODO uin是否就是uid
         let query = connection.query(`CALL syncPayResult(?, ?, ?);`,
-            [q.sdk, q.app, q.uin], 
+            [q.sdk, q.app, q.uin],
             function (error, results, fields) {
                 if (error) {
                     console.log(error);
@@ -115,7 +114,7 @@ app.get("/syncPayResult", (req, res) => {
                 const json = JSON.stringify(results[0]);
                 res.send(json);
             });
-        console.log("execute sql:", query.sql);   
+        console.log("execute sql:", query.sql);
     });
 });
 
@@ -133,7 +132,7 @@ connection.connect(function(err) {
       console.error('error connecting: ' + err.stack);
       return;
     }
-   
+
     console.log('connected as id ' + connection.threadId);
 });
 
