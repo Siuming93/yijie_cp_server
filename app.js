@@ -66,10 +66,11 @@ app.get("/checkOrder", (req, res) => {
         res.send("FAIL");
         return 
     }*/
-    var result = "";
+    var result = "ALL:" + arr.length;
     for (var i = 0; i < arr.length; i++) {
+        result += " \n\r "
+        result += " \n "
         result += i + ":" + arr[i];
-        result += "                       "
     }
     res.send(result);
 
