@@ -40,7 +40,7 @@ app.get("/orderCallBack", (req, res) => {
     }*/
     console.log("req.query:" + req.query);
     console.log("res:" + res);
-    res.send("SUCCESS");
+    res.send("SUCCESS " + "req.query:" + req.query + " res:" + res);
 
     return;
     //插入数据库
