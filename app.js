@@ -11,7 +11,7 @@ const yijieLoginURL = "http://sync.1sdk.cn/login/check.html";
 const requestTimeout = 1500;    //请求超时。单位：毫秒。
 
 const mysqlHost = "localhost";
-const mysqlUser = "cp_user";
+const mysqlUser = "root";
 const mysqlPassword = "FRMULy2FBzhcCc";
 const mysqlDatabase = "pay";
 
@@ -42,7 +42,7 @@ app.get("/orderCallBack", (req, res) => {
     }*/
     console.log("req.query:" + req.query);
     console.log("res:" + res);
-    arr.push("query.app:" + req.query.app +" uid" + req.query.uid);
+    arr.push("query.app:" + req.query.app + " uid" + req.query.uid + " serverSign" + getServerSign(req.query)) ;
     res.send("SUCCESS " + arr.length);
 
     return;
@@ -74,7 +74,6 @@ app.get("/checkOrder", (req, res) => {
     }
     res.send(result);
 
-    return;
     //插入数据库
     let order = convert2Order(req.query);
     let query = connection.query("INSERT IGNORE INTO orders SET ?", order, function (error, results, fields) {
@@ -120,18 +119,18 @@ app.get("/syncPayResult", (req, res) => {
 });
 
 app.listen(port, "0.0.0.0", () => console.log("listen on port", port));
-/*
+
 const connection = mysql.createConnection({
-    host     : mysqlHost,
-    user     : mysqlUser,
-    password : mysqlPassword,
-    database : mysqlDatabase
+    host: mysqlHost,
+    user: mysqlUser,
+    password: mysqlPassword,
+    database: mysqlDatabase
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
     if (err) {
-      console.error('error connecting: ' + err.stack);
-      return;
+        console.error('error connecting: ' + err.stack);
+        return;
     }
 
     console.log('connected as id ' + connection.threadId);
@@ -153,6 +152,22 @@ function getServerSign(query) {
     return md5(str);
 }
 
+function getServerSing1(query) {
+    let str = `app=${query.app}`;
+    str += `&cbi=${query.cbi}`;
+    str += `&ct=${query.ct}`;
+    str += `&fee=${query.fee}`;
+    str += `&pt=${query.pt}`;   //TODO 是否传入是毫秒级的
+    str += `&sdk=${query.sdk}`;
+    str += `&ssid=${query.ssid}`;
+    str += `&st=${query.st}`;
+    str += `&tcd=${query.tcd}`;
+    str += `&uid=${query.uid}`;
+    str += `&ver=${query.ver}`;
+    str += privateKey;
+    return str;
+}
+
 function convert2Order(query) {
     let order = {};
     order.app = query.app;
@@ -170,4 +185,3 @@ function convert2Order(query) {
 
     return order;
 }
-*/
