@@ -3,7 +3,7 @@
 const express = require("express");
 const request = require("request");
 const md5 = require("blueimp-md5");
-const mysql = require("mysql");
+//const mysql = require("mysql");
 
 const privateKey = "CRE56MZWXGIBOP6XHQJB5N0CRHVLLCWS"; //App的同步密钥
 const port = 18000;  //端口
@@ -47,7 +47,7 @@ app.get("/orderCallBack", (req, res) => {
 
     return;
     //插入数据库
-    let order = convert2Order(req.query);
+    /*let order = convert2Order(req.query);
     let query = connection.query("INSERT IGNORE INTO orders SET ?", order, function (error, results, fields) {
         if (error) {
             console.log(error);
@@ -56,7 +56,7 @@ app.get("/orderCallBack", (req, res) => {
     });
     console.log("execute sql:", query.sql);
 
-    res.send("SUCCESS");
+    res.send("SUCCESS");*/
 });
 
 app.get("/checkOrder", (req, res) => {
@@ -119,7 +119,7 @@ app.get("/syncPayResult", (req, res) => {
 });
 
 app.listen(port, "0.0.0.0", () => console.log("listen on port", port));
-
+/*
 const connection = mysql.createConnection({
     host: mysqlHost,
     user: mysqlUser,
@@ -134,7 +134,7 @@ connection.connect(function (err) {
     }
 
     console.log('connected as id ' + connection.threadId);
-});
+});*/
 
 function getServerSign(query) {
     let str = `app=${query.app}`;
