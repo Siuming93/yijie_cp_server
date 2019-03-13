@@ -75,16 +75,16 @@ app.get("/checkOrder", (req, res) => {
     res.send(result);
 
     //插入数据库
-    let order = convert2Order(req.query);
+    /*let order = convert2Order(req.query);
     let query = connection.query("INSERT IGNORE INTO orders SET ?", order, function (error, results, fields) {
         if (error) {
             console.log(error);
             return;
         }
     });
-    console.log("execute sql:", query.sql);
+    console.log("execute sql:", query.sql);*/
 
-    res.send("SUCCESS");
+    //res.send("SUCCESS");
 });
 
 app.get("/syncPayResult", (req, res) => {
