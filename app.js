@@ -43,8 +43,8 @@ app.get("/orderCallBack", (req, res) => {
     console.log("req.query:" + req.query);
     console.log("res:" + res);
     console.log("server1:" + getServerSing1(req.query).toString());
-    arr.push(" -----!!!!--- query.app:" + req.query.app + " uid" + req.query.uid + " serverSign" + getServerSign(req.query) + " reqSign" + req.query.sign + "server1:" + getServerSing1(req.query).toString());
-    res.send("SUCCESS " + arr.length);
+    arr.push(" -----!!!!--- query.app:" + req.query.app + " uid:" + req.query.uid + " serverSign:" + getServerSign(req.query) + " reqSign:" + req.query.sign + " server1:" + getServerSing1(req.query).toString());
+    res.send("SUCCESS");
 
     return;
     //插入数据库
