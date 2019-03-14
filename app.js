@@ -42,7 +42,7 @@ app.get("/orderCallBack", (req, res) => {
     }*/
     console.log("req.query:" + req.query);
     console.log("res:" + res);
-    arr.push("query.app:" + req.query.app + " uid" + req.query.uid + " serverSign" + getServerSign(req.query)) ;
+    arr.push("query.app:" + req.query.app + " uid" + req.query.uid + " serverSign" + getServerSign(req.query) + "reqSign" + req.query.sign) ;
     res.send("SUCCESS " + arr.length);
 
     return;
